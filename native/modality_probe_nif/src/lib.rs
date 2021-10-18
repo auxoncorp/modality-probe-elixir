@@ -109,7 +109,7 @@ extern "C" fn next_sequence_id(
     state: *mut core::ffi::c_void,
     out_sequence_id: *mut u16,
 ) -> usize {
-    let state: &mut AtomicU16 = unsafe { std::mem::transmute(state) };
+    let state: &AtomicU16 = unsafe { &*(state as *const std::sync::atomic::AtomicU16) };
 
     // This operation wraps around on overflow.
     let old = state.fetch_add(1, Ordering::SeqCst);
